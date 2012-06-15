@@ -11,8 +11,9 @@
 		dic = null, curr = null;
 	
 	function make (number) {
-		var int = parseInt(number, 10),
-			float = ((parseFloat(number) - int) * 100) | 0;
+		var str = number ? number.toString().split('.') : ['0', '0'],
+			int = parseInt(str[0], 10),
+			float = parseInt(str[1] ? str[1].substr(0, 2) : 0, 10);
 
 		dic = words[lang];
 		curr = dic.currency[currency];
