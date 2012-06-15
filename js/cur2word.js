@@ -254,7 +254,7 @@
 	};
 
 	global.c2w = make;
-})(window);
+})(window || module.exports);
 
 
 /*
@@ -367,4 +367,4 @@
 					}
 		}
 	};
-})(window)
+})(window || module.exports);
