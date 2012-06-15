@@ -16,7 +16,7 @@
 
 		dic = words[lang];
 		curr = dic.currency[currency];
-		return int2word(int) + ' ' + curr.int[int % 10] + ' ' + float2word(float);
+		return int2word(int) + ' ' + getIntCurrency(int) + ' ' + float2word(float);
 	};
 	
 	
@@ -38,6 +38,10 @@
 		addToRes(str);
 		
 		return arr;
+	}
+	
+	function getIntCurrency(num) {
+		return curr.int[num % 100] || curr.int[num % 10] || curr.int['d'];
 	}
 	
 	/*
@@ -290,16 +294,15 @@
 		'currency': {
 					'810': {
 						'int'   : {
-								0: 'рублей',
+								'd': 'рублей',
 								1: 'рубль',
 								2: 'рубля',
 								3: 'рубля',
 								4: 'рубля',
-								5: 'рублей',
-								6: 'рублей',
-								7: 'рублей',
-								8: 'рублей',
-								9: 'рублей'
+								11: 'рублей',
+								12: 'рублей',
+								13: 'рублей',
+								14: 'рублей'
 						}
 						, 'float': {
 								0: 'копеек',
