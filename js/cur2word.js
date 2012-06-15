@@ -12,11 +12,11 @@
 	
 	function make (number) {
 		var int = parseInt(number, 10),
-			float = int - parseFloat(number);
+			float = ((parseFloat(number) - int) * 100) | 0;
 
 		dic = words[lang];
 		curr = dic.currency[currency];
-		return int2word(int) + ' ' + getIntCurrency(int) + ' ' + float2word(float);
+		return int2word(int) + ' ' + getIntCurrency(int) + ' ' + float2word(float) + ' ' + getFloatCurrency(float);
 	};
 	
 	
@@ -44,17 +44,25 @@
 		return curr.int[num % 100] || curr.int[num % 10] || curr.int['d'];
 	}
 	
+	function getFloatCurrency(num) {
+		return curr.float[num % 100] || curr.float[num % 10] || curr.float['d'];
+	}
+	
 	/*
 	 * 6 => шесть
 	 */
-	function digit2word(digit) {
-		return dic.digit[digit];
+	function digitInt2word(digit) {
+		return dic.digitInt[digit];
+	};	
+	
+	function digitFloat2word(digit) {
+		return dic.digitFloat[digit];
 	};
 	
 	/*
 	 * 60
 	 */
-	function number2word(number) {
+	function numberInt2word(number) {
 		var i, j,
 			r = dic.number[number];
 		
@@ -62,9 +70,29 @@
 			if (number > 9) {
 				i = ((number / 10) | 0) * 10;
 				j = number % 10;
-				r = dic.number[i] + ' ' + digit2word(j);
+				r = dic.number[i] + ' ' + digitInt2word(j);
 			} else {
-				r = digit2word(number);
+				r = digitInt2word(number);
+			}
+		}
+		
+		return r;
+	}	
+	
+	/*
+	 * 60
+	 */
+	function numberFloat2word(number) {
+		var i, j,
+			r = dic.number[number];
+		
+		if (!r) {
+			if (number > 9) {
+				i = ((number / 10) | 0) * 10;
+				j = number % 10;
+				r = dic.number[i] + ' ' + digitFloat2word(j);
+			} else {
+				r = digitFloat2word(number);
 			}
 		}
 		
@@ -81,7 +109,7 @@
 		}
 		
 		if (n) {
-			s.push(number2word(n));
+			s.push(numberInt2word(n));
 		}
 		
 		return s.join(' ');
@@ -195,7 +223,7 @@
 			l = arr.length;
 			
 		if (l === 1 && !arr[0]) {
-			s.push(digit2word(0));
+			s.push(digitInt2word(0));
 		} else {
 			while (l--) {
 				buff = callForRaz(l, arr[l]);
@@ -210,10 +238,18 @@
 	};
 	
 	/*
-	 * 0.98 => девяносто восемь копеек
+	 * 98 => девяносто восемь копеек
 	 */
 	function float2word(float) {
-		return '';
+		var s;
+			
+		if (!float) {
+			s = digitFloat2word(0);
+		} else {
+			s = numberFloat2word(float);
+		}
+		
+		return s;
 	};
 
 	global.c2w = make;
@@ -226,10 +262,22 @@
 (function (global) {
 	var words = global.c2w.words;
 	words['ru'] = {
-		'digit': {
+		'digitInt': {
 					0: 'ноль', 
 					1: 'один',
 					2: 'два',
+					3: 'три',
+					4: 'четыре',
+					5: 'пять',
+					6: 'шесть',
+					7: 'семь',
+					8: 'восемь',
+					9: 'девять'
+		},
+		'digitFloat': {
+					0: 'ноль', 
+					1: 'одна',
+					2: 'две',
 					3: 'три',
 					4: 'четыре',
 					5: 'пять',
@@ -305,16 +353,15 @@
 								14: 'рублей'
 						}
 						, 'float': {
-								0: 'копеек',
+								'd': 'копеек',
 								1: 'копейка',
 								2: 'копейки',
 								3: 'копейки',
 								4: 'копейки',
-								5: 'копеек',
-								6: 'копеек',
-								7: 'копеек',
-								8: 'копеек',
-								9: 'копеек'
+								11: 'копеек',
+								12: 'копеек',
+								13: 'копеек',
+								14: 'копеек'
 						}						
 					}
 		}
